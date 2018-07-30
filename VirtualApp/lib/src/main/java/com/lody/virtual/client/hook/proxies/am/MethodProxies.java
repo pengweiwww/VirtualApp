@@ -586,7 +586,21 @@ class MethodProxies {
         }
 
         @Override
+        public Object call(Object who, Method method, Object... args) throws Throwable {
+            MethodHookers.MethodHooker hooker = MethodHookers.sFinishHooker;
+            if (hooker == null || !hooker.isEnable(this, who, method, args)) {
+                return super.call(who, method, args);
+            }
+
+            return hooker.call(this, who, method, args);
+        }
+
+        @Override
         public Object afterCall(Object who, Method method, Object[] args, Object result) throws Throwable {
+            if (Boolean.FALSE.equals(result)) {
+                return result;
+            }
+
             IBinder token = (IBinder) args[0];
             ActivityClientRecord r = VActivityManager.get().getActivityRecord(token);
             boolean taskRemoved = VActivityManager.get().onActivityDestroy(token);
@@ -609,6 +623,7 @@ class MethodProxies {
                     e.printStackTrace();
                 }
             }
+
             return super.afterCall(who, method, args, result);
         }
 
