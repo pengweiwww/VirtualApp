@@ -23,7 +23,7 @@ public class ClipBoardStub extends BinderInvocationProxy {
     }
 
     private static IInterface getInterface() {
-        if (BuildCompat.isOreo()) {
+        if (BuildCompat.isOreo() && ClipboardManagerOreo.mService != null) {
             android.content.ClipboardManager cm = (android.content.ClipboardManager)
                     VirtualCore.get().getContext().getSystemService(Context.CLIPBOARD_SERVICE);
             return ClipboardManagerOreo.mService.get(cm);
@@ -49,7 +49,7 @@ public class ClipBoardStub extends BinderInvocationProxy {
     @Override
     public void inject() throws Throwable {
         super.inject();
-        if (BuildCompat.isOreo()) {
+        if (BuildCompat.isOreo() && ClipboardManagerOreo.mService != null) {
             android.content.ClipboardManager cm = (android.content.ClipboardManager)
                     VirtualCore.get().getContext().getSystemService(Context.CLIPBOARD_SERVICE);
             ClipboardManagerOreo.mService.set(cm, getInvocationStub().getProxyInterface());
