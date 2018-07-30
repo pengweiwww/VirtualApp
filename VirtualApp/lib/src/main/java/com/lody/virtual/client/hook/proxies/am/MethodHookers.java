@@ -24,6 +24,6 @@ public class MethodHookers {
         /**
          * 如果isEnable返回true，则会调用call方法
          */
-        Object call(MethodProxy methodProxy, Object who, Method method, Object... args);
+        Object call(MethodProxy methodProxy, Object who, Method method, Object... args) throws Throwable;
     }
 }
